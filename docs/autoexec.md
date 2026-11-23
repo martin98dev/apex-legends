@@ -1,48 +1,64 @@
-# autoexec.cfg notes
+# autoexec.cfg
 
-Status: **no autoexec in use.** These notes are for building one later. Checked against build `R5pc_r5-310` (Season 31) on 2026-11-23.
+[`cfg/autoexec.cfg`](../cfg/autoexec.cfg) holds my settings as console commands, so a fresh install gets them on the first launch.
 
-## How it would be loaded
+Version 1, generated 2026-11-23 from `Apex/local/settings.cfg` and `Apex/profile/profile.cfg` (Season 31, build `R5pc_r5-310`). **Not yet tested in game.**
 
-- The exe has no `autoexec` string, so the game doesn't run one by itself. The `exec` command does exist.
-- The usual setup is a file at `C:\Program Files (x86)\Steam\steamapps\common\Apex Legends\cfg\autoexec.cfg`, loaded with the launch option `+exec autoexec`. That comes from the DominicKlmNL repo; I haven't tested it.
-- A cvar existing in the exe doesn't mean a config file may set it. Respawn locked many cvars in 2021 (per the Voltris guide), and DominicKlmNL removed 20 lines in Sep 2026 as "deprecated, server-side blocked". The only real test is to run the line and check its effect in game.
-- Most useful settings are already saved by the menu in `profile.cfg` / `settings.cfg` (audio, HUD, FOV, sprint view shake, netgraph) or in `videoconfig.txt`. Putting them in an autoexec only duplicates them.
+## Install
 
-## Commands from community autoexecs, checked against the exe
+1. Copy `cfg\autoexec.cfg` to `C:\Program Files (x86)\Steam\steamapps\common\Apex Legends\cfg\autoexec.cfg`.
+2. Add `+exec autoexec` to the Steam launch options (see [launch-options.md](launch-options.md)).
 
-From the [DominicKlmNL autoexec](https://github.com/DominicKlmNL/apex-legends-config) (Sep 2026, every line marked "(Works)") and older configs (rikarsen, kretz1xD, missoutpc).
+The game doesn't run an autoexec by itself: the word `autoexec` isn't in the exe. The `exec` command is, next to the strings `cfg/%s` and `.cfg`, so `exec autoexec` loads `autoexec.cfg` from the game's `cfg` folder. The [DominicKlmNL repo](https://github.com/DominicKlmNL/apex-legends-config) (Sep 2026) uses the same setup.
 
-**Not in the exe, so they do nothing:**
+## What's in it
+
+- **111 settings** from `settings.cfg` and `profile.cfg`, in sections: mouse, latency, field of view and camera, gameplay, HUD, visual, audio, voice and chat, subtitles, other.
+- **All 68 keyboard and mouse binds**, grouped by purpose. They come after `unbindall_ignoreGamepad`, which clears keyboard and mouse binds first, so no leftover default binds survive on a fresh install.
+- Lines are copied unchanged, including the trailing `0` or `1` on bind lines. That number is part of the format the game writes (`%s "%s" "%s" %i` in the exe); what it means is unknown.
+
+## What's left out, and why
+
+| Left out | Why |
+|---|---|
+| Video settings | They live in `videoconfig.txt`, which also holds values the menu can't set, like `csm_cascade_res 16`. Copy that file instead (see [videoconfig.md](videoconfig.md)). The [Voltris guide](https://www.voltrisoptimizer.com/en/guides/apex-legends-config-autoexec-superglide) says Respawn blocked most graphics commands in config files in 2021 |
+| Master volume | It's `setting.sound_volume` in `videoconfig.txt` |
+| Controller settings and binds (56 settings, 31 binds) | No controller in this setup |
+| Game-managed state: EULA, intro and first-time flags, cached player level, telemetry dates, chat-block timers | Not settings. Forcing them could confuse the game |
+| Values tied to this PC or account: `name`, audio and microphone devices, HDR screenshot folder | Differ per PC |
+| Engine leftovers with no menu option: `lookspring`, `lookstrafe`, `func_break_max_pieces`, spectator camera speed | Defaults |
+| FPS cap | Set by the launch options or RTSS |
+
+## Things to know
+
+- **It runs at every launch.** A setting you change only in the menu goes back to the autoexec value at the next launch. After a session, `git diff Apex/` shows which values changed; copy those lines into the autoexec.
+- **Load order is unknown.** If the game loads `settings.cfg` and `profile.cfg` after the autoexec, their values win. Today both hold the same values, so it doesn't matter yet.
+- **Binds may be filtered.** The exe has a `bind_exec_sanitize` command, which suggests binds coming from config files get cleaned up. Two binds contain `;`: E (`+use; +use_long`) and F9 (`miles_reboot; miles_stop_all`). Check that both still work.
+- **Existing isn't the same as allowed.** Every name in the file exists in the exe, but that doesn't prove a config may set it. The game saves all of these values itself, so they're the most likely to work.
+
+## First launch check
+
+1. Install it as above.
+2. To confirm it runs, temporarily change one harmless line only in the installed copy, for example `sound_volume_music_lobby "0"`. A silent lobby means it ran. Change it back afterwards.
+3. Check E (interact, hold for the wheel) and F9 (restart audio).
+4. Quit, then run `git diff Apex/`. Nothing should change except what you changed on purpose. If binds are missing, delete the `unbindall_ignoreGamepad` line and try again.
+
+## Candidates for later
+
+These exist in the exe and aren't saved by the menu. Each is untested, so add one at a time and keep it only if it visibly does something.
+
+| Command | What it does | Note |
+|---|---|---|
+| `sssss_enable "0"` | Turns off screen-space subsurface scattering, the skin-lighting effect on characters | Possible small FPS gain; changes how characters look |
+| `stream_drop_unused "1"` | Frees unused textures sooner | Unknown effect on stutter |
+| `telemetry_client_enable "0"`, `telemetry_client_sendInterval "0"` | Client telemetry | Privacy only; no evidence of a performance effect |
+
+Leave alone: `miles_occlusion "0"`. Older configs use it to stop walls from muffling sound, which changes what you hear in fights.
+
+## Commands from community autoexecs that don't exist
+
+The [DominicKlmNL autoexec](https://github.com/DominicKlmNL/apex-legends-config) marks every line "(Works)". Older configs ([rikarsen](https://github.com/rikarsen/apex-config), [kretz1xD](https://github.com/kretz1xD/Apex-Legends-Tweaks), [missoutpc](https://missoutpc.com/en/optimization/apex/)) use similar lines. None of these names are in the r5-310 exe, so they do nothing:
 
 `mat_queue_mode`, `m_rawinput`, `m_filter`, `m_customaccel`, `snd_mixahead`, `snd_headphone_pan_exponent`, `shadow_always_update`, `r_drawmodeldecals`, `r_decalstaticprops`, `r_forcecheapwater`, `r_waterforcereflectentities`, `cl_ejectbrass`, `hud_setting_enableModWheel`, `player_setting_enable_heartbeat_sounds`, `mat_depthfeather_enable`, `mat_bumpmap`, `mat_specular`, `voice_forcemicrecord`, `mat_letterbox_aspect_threshold`, `cl_interp`, `cl_interp_ratio`, `host_writeconfig`, `mat_disable_bloom`, `cl_forcepreload`
 
-**In the exe (so they *may* work):**
-
-| Command | Note |
-|---|---|
-| `fps_max`, `lobby_max_fps` | Same as the launch options |
-| `m_acceleration` | Already in `settings.cfg` (0) |
-| `sound_num_speakers`, `miles_channels` | 2 = stereo, 6 = 5.1, 8 = 7.1. `settings.cfg` has 2 and 0 |
-| `sound_volume_*`, `sound_without_focus` | Already in `profile.cfg` |
-| `noise_filter_scale` | Film grain. Already 0 in `profile.cfg` |
-| `fov_disableAbilityScaling`, `sprint_view_shake_style`, `net_netGraph2` | Already in `profile.cfg` |
-| `particle_cpu_level`, `cl_ragdoll_maxcount`, `r_createmodeldecals` | Already in `videoconfig.txt` |
-| `sssss_enable` | Screen-space subsurface scattering on characters (skin rendering). Not saved anywhere yet; a candidate to test |
-| `g_ragdoll_fadespeed`, `g_ragdoll_lvfadespeed` | Ragdoll fade speed. Irrelevant with ragdolls at 0 |
-| `r_deferred_decals` | World decals. `r_decals 0` in videoconfig already covers them |
-| `stream_drop_unused` | Frees unused textures sooner. Unknown effect on stutter |
-| `telemetry_client_enable`, `telemetry_client_sendInterval`, `pin_opt_in`, `pin_plat_id` | Telemetry and data surveys. `pin_opt_in` is 1 in `profile.cfg` |
-| `projectile_prediction`, `projectile_predictionErrorCorrectTime` | Client-side projectile prediction. Probably server-controlled; don't touch |
-| `cl_matchmaking_timeout` | Matchmaking timeout |
-| `building_cubemaps`, `mat_letterbox_aspect_goal`, `mat_letterbox_aspect_min` | Only needed for stretched resolutions |
-| `miles_occlusion` | Older configs set 0 to turn off sound occlusion through walls. That changes what you hear in fights, so it's a gameplay change; leave it alone |
-| `cl_showfps`, `mat_postprocess_enable`, `r_drawparticles`, `rate` | Exist. Respawn probably blocks the visual ones from config files |
-
-## If an autoexec is made
-
-Keep it to lines that exist in the exe and aren't already saved by the menu. Test each line in the Firing Range and delete any that has no visible effect. To check whether a name still exists after a game update (prints `True` or `False`):
-
-```
-python -c "import sys;d=open(sys.argv[2],'rb').read();print(b'\0'+sys.argv[1].encode()+b'\0' in d)" sssss_enable "C:\Program Files (x86)\Steam\steamapps\common\Apex Legends\r5apex_dx12.exe"
-```
+To check a name after a game update, use the command in [launch-options.md](launch-options.md#how-an-option-was-checked).

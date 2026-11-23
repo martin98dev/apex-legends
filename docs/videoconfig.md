@@ -17,7 +17,7 @@ Reddit blocks the research tool and YouTube videos can't be watched, so neither 
 
 ## Keys the game reads
 
-The exe contains exactly **46** `setting.*` keys. Values come from the note.com guide unless marked otherwise. "Mine" is my current value.
+The exe contains exactly **46** `setting.*` keys. Values come from the [note.com guide](https://note.com/ebi_suuuuuu/n/nd51daeac3755?hl=en) unless another source is linked. "Mine" is my current value.
 
 ### Shadows and lighting
 
@@ -25,13 +25,13 @@ The exe contains exactly **46** `setting.*` keys. Values come from the note.com 
 |---|---|---|---|
 | `csm_enabled` | 0 | 0 / 1 | Sun shadows (cascaded shadow maps). The menu has no Off option and always writes 1. The guide suspects 0 is a placebo now |
 | `csm_coverage` | 0 | 0 / 1 Low / 2 High | Menu: Sun Shadow Coverage. The guide says 0 probably has no effect |
-| `csm_cascade_res` | 16 | 0 / 512 Low / 1024 High | Resolution of the sun shadow maps. 512 is the lowest the menu writes. ApexDt and Voltris use 16 as "minimum possible" |
+| `csm_cascade_res` | 16 | 0 / 512 Low / 1024 High | Resolution of the sun shadow maps. 512 is the lowest the menu writes. [ApexDt](https://github.com/ApexDt/Apex-Legends/blob/master/videoconfig.txt) and [Voltris](https://www.voltrisoptimizer.com/en/guides/apex-legends-config-autoexec-superglide) use 16 as the "minimum possible" |
 | `shadow_enable` | 0 | 0 / 1 | Spot shadows (sun and spot, per the guide) |
 | `shadow_depth_dimen_min` | 0 | 0 / 128 / 256 / 512 | Spot shadow resolution. Menu: Spot Shadow Detail |
 | `shadow_depth_upres_factor_max` | 0 | 0 / 2 / 3 | Spot shadow upscaling. Part of Spot Shadow Detail |
-| `shadow_maxdynamic` | 0 | 0 / 4 | Menu: Dynamic Spot Shadows (moving lights). NVIDIA measured 13 FPS for these in Titanfall 2 |
+| `shadow_maxdynamic` | 0 | 0 / 4 | Menu: Dynamic Spot Shadows (moving lights). Turning them off gained 13 FPS in Titanfall 2 ([NVIDIA](https://www.nvidia.com/en-us/geforce/news/titanfall-2-graphics-performance-and-tweaking-guide/)) |
 | `new_shadow_settings` | 0 | 0 / 1 | Unknown. The game writes 1 whenever it saves |
-| `ssao_quality` | 0 | 0 off / 1 Low / 2 High / 3 Very High / 4 Ultra | Menu: Ambient Occlusion Quality. Rebuilt in Season 29 with specular occlusion |
+| `ssao_quality` | 0 | 0 off / 1 Low / 2 High / 3 Very High / 4 Ultra | Menu: Ambient Occlusion Quality. Rebuilt in Season 29 with specular occlusion ([patch notes](https://www.ea.com/games/apex-legends/apex-legends/news/overclocked-patch-notes)) |
 | `ssao_enabled` | — | 0 / 1 | Pre-Season 29 key. The game removes it when it upgrades the file |
 | `ssao_downsample` | — | 0–3 | Pre-Season 29 key. The game removes it when it upgrades the file |
 | `volumetric_lighting` | 0 | 0 / 1 | Light shafts through dust |
@@ -41,16 +41,16 @@ The exe contains exactly **46** `setting.*` keys. Values come from the note.com 
 
 | Key | Mine | Values | What it does |
 |---|---|---|---|
-| `r_lod_switch_scale` | **2.0** | 0.6 min / 0.8 / 1.0 Medium / 2.0 High | Menu: Model Detail. The distance multiplier for swapping models to lower-detail versions. The guide says 0.6 is the current minimum; old configs used 0.2–0.4. In Titanfall 2, each step above 1 cost about 1–3 FPS |
+| `r_lod_switch_scale` | **2.0** | 0.6 min / 0.8 / 1.0 Medium / 2.0 High | Menu: Model Detail. The distance multiplier for swapping models to lower-detail versions. The guide says 0.6 is the current minimum; old configs used 0.2–0.4. In Titanfall 2, each step above 1 cost about 1–3 FPS ([NVIDIA](https://www.nvidia.com/en-us/geforce/news/titanfall-2-graphics-performance-and-tweaking-guide/)) |
 | `fadeDistScale` | 1.0 | 0 and up. 0.6 / 0.8 / 1.0 default | Distance at which small props (pebbles, grass, trash, decorations) fade out. Lower means they vanish closer to you |
-| `map_detail_level` | 1 | 1 Low / 2 High | Menu: Map Detail. The DominicKlmNL config (Sep 2026) uses 0, below the menu minimum |
-| `set_dress_level` | — | Unknown. A 2024 Steam config used 0 | Sets the cvar `mat_set_dress_level`. "Set dressing" means decorative level props. The game doesn't write this key on PC today, but the exe still reads it |
-| `r_decals` | 0 | 0 / 256 | Impact marks on the world. Titanfall 2 allowed raising it to 1024 |
+| `map_detail_level` | 1 | 1 Low / 2 High | Menu: Map Detail. The [DominicKlmNL config](https://github.com/DominicKlmNL/apex-legends-config) (Sep 2026) uses 0, below the menu minimum |
+| `set_dress_level` | — | Unknown. A [2024 Steam config](https://steamcommunity.com/app/1172470/discussions/0/4766584846449919679/) used 0 | Sets the cvar `mat_set_dress_level`. "Set dressing" means decorative level props. The game doesn't write this key on PC today, but the exe still reads it |
+| `r_decals` | 0 | 0 / 256 | Impact marks on the world. Titanfall 2 allowed raising it to 1024 ([NVIDIA](https://www.nvidia.com/en-us/geforce/news/titanfall-2-graphics-performance-and-tweaking-guide/)) |
 | `r_createmodeldecals` | 0 | 0 / 1 | Impact marks on characters |
 | `cl_particle_fallback_base` | 3 | 0 off / 3 on | Threshold at which effects get simplified. Menu: Effects Detail |
-| `cl_particle_fallback_multiplier` | 2 | 1 High / 1.75 Medium / 2 Low | How hard effects get simplified. 2019–2023 configs used ±999999; untested on current builds |
+| `cl_particle_fallback_multiplier` | 2 | 1 High / 1.75 Medium / 2 Low | How hard effects get simplified. 2019–2023 configs ([ApexDt](https://github.com/ApexDt/Apex-Legends/blob/master/videoconfig.txt), [Zazzop](https://github.com/Zazzop/Apex-Legends/blob/master/videoconfig.txt), [240hz](https://github.com/240hz/ApexConfigs/blob/master/videoconfig.txt)) used ±999999; untested on current builds |
 | `particle_cpu_level` | 0 | 0 / 1 / 2 | CPU-side detail for particle effects |
-| `cl_ragdoll_maxcount` | 0 | 0 Low / 4 Medium / 8 High | Number of bodies shown at once. Titanfall 2 used the same 0/4/8 |
+| `cl_ragdoll_maxcount` | 0 | 0 Low / 4 Medium / 8 High | Number of bodies shown at once. Titanfall 2 used the same 0/4/8 ([NVIDIA](https://www.nvidia.com/en-us/geforce/news/titanfall-2-graphics-performance-and-tweaking-guide/)) |
 | `cl_ragdoll_self_collision` | 0 | 0 / 1 | Physics collisions between body parts |
 | `cl_gib_allow` | 0 | 0 / 1 | Gore and debris |
 
@@ -61,14 +61,14 @@ The exe contains exactly **46** `setting.*` keys. Values come from the note.com 
 | `stream_memory` | 3000000 | 0 None / 160000 Very Low / 300000 Low / 600000 Medium / 1000000 High / 2000000 Very High / 3000000 top | Menu: Texture Streaming Budget. The exe has an "Ultra" label, so 3000000 is probably Ultra. No FPS cost with 16 GB of VRAM |
 | `mat_picmip` | 0 | 0 high / 1 / 2. The guide gives −10 to 8 as the working range | Texture resolution. Old configs used 4 with `stream_memory 0` |
 | `mat_forceaniso` | 16 | 1 / 2 / 4 / 8 / 16 | Anisotropic filtering level |
-| `mat_mip_linear` | 1 | 0 bilinear / 1 trilinear | Mipmap blending. Together with `mat_forceaniso` this is the menu's Texture Filtering (Bilinear, Trilinear, 2×–16×). NVIDIA measured 0.7 FPS between 16× and bilinear |
+| `mat_mip_linear` | 1 | 0 bilinear / 1 trilinear | Mipmap blending. Together with `mat_forceaniso` this is the menu's Texture Filtering (Bilinear, Trilinear, 2×–16×). 16× vs bilinear cost 0.7 FPS in Titanfall 2 ([NVIDIA](https://www.nvidia.com/en-us/geforce/news/titanfall-2-graphics-performance-and-tweaking-guide/)) |
 | `dynamic_streaming_budget` | 1 | 0 / 1 (the guide lists up to 4) | DX12. 1 lets texture loading yield to rendering, which avoids stutter |
 
 ### Display
 
 | Key | Mine | Values | What it does |
 |---|---|---|---|
-| `mat_antialias_mode` | 12 | 0 none / 12 TSAA | Anti-aliasing. NVIDIA measured TSAA at 5 FPS on 2016 hardware. The exe also has a `-mat_antialias_mode` launch switch |
+| `mat_antialias_mode` | 12 | 0 none / 12 TSAA | Anti-aliasing. TSAA cost 5 FPS on 2016 hardware ([NVIDIA](https://www.nvidia.com/en-us/geforce/news/titanfall-2-graphics-performance-and-tweaking-guide/)). The exe also has a `-mat_antialias_mode` launch switch |
 | `mat_vsync_mode` | 0 | 0 off / 1 double / 2 triple / 3 adaptive / 4 adaptive ½ | V-Sync. The exe's menu labels also include "Dynamic" |
 | `mat_backbuffer_count` | 1 | 0 / 1 / 2 | Number of queued back buffers. The guide recommends 0 with V-Sync off; configs are split between 0 and 1 |
 | `fullscreen` | 1 | 0 / 1 | 1 = fullscreen. The exe's menu labels are Fullscreen, Windowed, Borderless Window |
@@ -77,7 +77,7 @@ The exe contains exactly **46** `setting.*` keys. Values come from the note.com 
 | `last_display_width` / `last_display_height` | 2560 / 1440 | Pixels | Resolution at the last launch |
 | `dvs_enable` | 0 | 0 / 1 | Menu: Adaptive Resolution |
 | `dvs_gpuframetime_min` / `_max` | 15000 / 16500 | Microseconds | Frame-time targets for adaptive resolution. Unused while it's off |
-| `gamma` | 1.0 | 0.25–1.75. 1.0 = 50% | Brightness, about 0.015 per 1%. Respawn advised the default after reducing bloom in the Season 29 midseason patch |
+| `gamma` | 1.0 | 0.25–1.75. 1.0 = 50% | Brightness, about 0.015 per 1%. Respawn advised the default after reducing bloom ([Season 29 midseason notes](https://www.ea.com/games/apex-legends/apex-legends/news/overclocked-midseason-patch-notes)) |
 
 ### Other
 
@@ -85,11 +85,11 @@ The exe contains exactly **46** `setting.*` keys. Values come from the note.com 
 |---|---|---|---|
 | `sound_volume` | 0.6 | 0–1 | Master volume. It's stored in this file, so it doesn't save while the file is read-only |
 | `configversion` | 10 | — | File format version. Season 29 moved it from 9 to 10 |
-| `cl_fovScale` | — | 1.0–1.55 (1.55 = 110) | In the exe's key table, but probably for consoles. On PC, FOV is saved in `profile.cfg` |
+| `cl_fovScale` | — | 1.0–1.55 (1.55 = 110) | In the exe's key table, but probably for consoles. On PC, FOV is saved in `profile.cfg` ([1.55 = 110](https://mouse-sensitivity.com/forums/topic/6892-apex-110-fov-multiplier-155-vs-1571429)) |
 
 ## Keys from old configs that do nothing
 
-None of these strings appear anywhere in the r5-310 exe, not even as a cvar name, so the game ignores them:
+None of these names appear anywhere in the r5-310 exe, checked with the test in [launch-options.md](launch-options.md#how-an-option-was-checked). The game ignores them:
 
 `mat_depthfeather_enable`, `modeldecals_forceAllowed`, `dvs_supersample_enable`, `ao_enable`, `bnao_enabled`, `dx_version_check_timestamp`, `mat_disable_bloom`, `mat_specular`, `mat_bumpmap`
 
@@ -107,8 +107,8 @@ Change one thing at a time in `staging/`, copy it over, lock the file, test, the
 | # | Change | Why | How to check |
 |---|---|---|---|
 | 1 | Settle `csm_enabled` vs `csm_cascade_res`: try 0+16, 1+16 and 1+512 | Shows which key actually removes sun shadows. If `csm_enabled 0` is a placebo, `csm_cascade_res 16` (a 16×16 shadow map) is what does the work | Firing Range, your own shadow and a rock's shadow in sunlight |
-| 2 | `fadeDistScale` 1.0 → 0.75 → 0.5 | Small clutter fades sooner: less to draw, less visual noise | Grassy and junk-filled areas. Check that props used as cover don't disappear |
-| 3 | `r_lod_switch_scale` 2.0 → 1.0 → 0.6 | You run High model detail while everything else is at minimum | Frame times in busy fights. You sit at the 280 cap otherwise |
+| 2 | `fadeDistScale` 1.0 → 0.75 → 0.5 | Small clutter fades sooner: less to draw, less visual noise. [ApexDt](https://github.com/ApexDt/Apex-Legends/blob/master/videoconfig.txt) uses 0.75 | Grassy and junk-filled areas. Check that props used as cover don't disappear |
+| 3 | `r_lod_switch_scale` 2.0 → 1.0 → 0.6 | You run High model detail while everything else is at minimum | Frame times in busy fights. Outside fights you sit at the FPS cap, so differences won't show |
 | 4 | Add `"setting.set_dress_level" "0"` | The only key the game reads that you don't set. It may remove decorative props, or it may be console-only | Same cluttered spot, before and after screenshots |
 | 5 | `map_detail_level` 1 → 0 | Below the menu minimum; one current config uses it. Effect unknown | Screenshots |
 | 6 | `mat_backbuffer_count` 1 → 0 | A possible latency change with V-Sync off | Frame times / latency in PresentMon or CapFrameX |
@@ -147,4 +147,5 @@ A new key means a new video setting, which is the time to update this file. The 
 - [Marked patch notes (Season 30)](https://www.ea.com/games/apex-legends/news/marked-patch-notes)
 - [Steam: FPS drop fix after update, 2024 config with set_dress_level](https://steamcommunity.com/app/1172470/discussions/0/4766584846449919679/)
 - [Voltris guide, csm_cascade_res 16](https://www.voltrisoptimizer.com/en/guides/apex-legends-config-autoexec-superglide)
+- [mouse-sensitivity.com: cl_fovScale 1.55 = 110](https://mouse-sensitivity.com/forums/topic/6892-apex-110-fov-multiplier-155-vs-1571429)
 - Configs: [DominicKlmNL](https://github.com/DominicKlmNL/apex-legends-config) (Sep 2026, configversion 10), [kretz1xD](https://github.com/kretz1xD/Apex-Legends-Tweaks) (Aug 2026, configversion 10), [ApexDt](https://github.com/ApexDt/Apex-Legends/blob/master/videoconfig.txt) (2020), [Zazzop](https://github.com/Zazzop/Apex-Legends/blob/master/videoconfig.txt) (2023), [V3nilla](https://github.com/V3nilla/Apex-Legends-Config-And-Tweaks/blob/main/videoconfig.txt) (2024), [rikarsen](https://github.com/rikarsen/apex-config) (2022), [240hz](https://github.com/240hz/ApexConfigs/blob/master/videoconfig.txt) (2019)
