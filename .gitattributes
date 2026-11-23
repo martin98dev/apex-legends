@@ -1,0 +1,2 @@
+# Game reads these as CRLF; pin it so clones match regardless of core.autocrlf
+* text eol=crlf

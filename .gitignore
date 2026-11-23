@@ -1,0 +1,18 @@
+# Ignore everything, then whitelist tracked configs
+/*
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/LICENSE
+
+!/Apex/
+/Apex/*
+
+!/Apex/local/
+/Apex/local/*
+!/Apex/local/settings.cfg
+!/Apex/local/videoconfig.txt
+
+!/Apex/profile/
+/Apex/profile/*
+!/Apex/profile/profile.cfg
