@@ -17,8 +17,6 @@
 	"setting.shadow_depth_dimen_min"		"0"
 	"setting.shadow_depth_upres_factor_max"		"0"
 	"setting.shadow_maxdynamic"		"0"
-	"setting.ssao_enabled"		"0"
-	"setting.ssao_downsample"		"3"
 	"setting.dvs_enable"		"0"
 	"setting.dvs_gpuframetime_min"		"15000"
 	"setting.dvs_gpuframetime_max"		"16500"
@@ -41,7 +39,7 @@
 	"setting.new_shadow_settings"		"0"
 	"setting.dynamic_streaming_budget"		"1"
 	"setting.gamma"		"1.000000"
-	"setting.configversion"		"9"
+	"setting.configversion"		"10"
 	"setting.map_detail_level"		"1"
+	"setting.ssao_quality"		"0"
 }
- 
