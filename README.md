@@ -14,6 +14,8 @@ Setup: Radeon RX 9070 XT, Ryzen 7 9800X3D, 32 GB RAM, 2560×1440 at 360 Hz (Alie
 | `Apex/local/settings.cfg` | Key binds, mouse sensitivity, Anti-Lag 2 / Reflex, voice chat | The game, on exit |
 | `Apex/profile/profile.cfg` | FOV, HUD, gameplay options, audio volumes, controller | The game, on exit |
 | `staging/` | Drafts of the three files above, same layout as `Apex/` | Me |
+| [`docs/videoconfig.md`](docs/videoconfig.md) | Every videoconfig key: values, what it does, ideas to test | Research notes |
+| [`docs/autoexec.md`](docs/autoexec.md) | Which autoexec commands still exist, for a possible future autoexec | Research notes |
 
 Git ignores everything else in `Apex/`: shader cache, store assets and the Steam cloud file.
 
@@ -25,15 +27,30 @@ Steam → Library → right-click Apex Legends → Properties → General → La
 +fps_max 0 +lobby_max_fps 0 +m_rawinput 1 -forcenovsync -fullscreen -novid -dev
 ```
 
-| Option | Effect |
-|---|---|
-| `+fps_max 0` | Removes the in-game frame cap. The engine still stops at 300 FPS (community-reported). |
-| `+lobby_max_fps 0` | Removes the lobby frame cap (default 60). |
-| `+m_rawinput 1` | Raw mouse input, bypassing Windows pointer settings. |
-| `-forcenovsync` | Forces V-Sync off. `setting.mat_vsync_mode "0"` already does this. |
-| `-fullscreen` | Exclusive fullscreen. `setting.fullscreen "1"` already does this. |
-| `-novid` | Skips the intro video. |
-| `-dev` | Skips the EA intro. |
+"In exe" means the name appears in `r5apex_dx12.exe` (build r5-310). An option the exe doesn't contain does nothing.
+
+| Option | In exe | Effect |
+|---|---|---|
+| `+fps_max 0` | yes | No in-game frame cap, so RivaTuner sets it (see below). The engine never goes above 300: `fps_absolute_max` is `300.0` in the exe. |
+| `+lobby_max_fps 0` | yes | No lobby cap (default 60). |
+| `+m_rawinput 1` | **no** | Does nothing. The cvar doesn't exist; the other mouse cvars (`m_acceleration`, `mouse_sensitivity`) do. |
+| `-forcenovsync` | **no** | Does nothing. `setting.mat_vsync_mode "0"` turns V-Sync off. |
+| `-fullscreen` | yes | Fullscreen. Redundant with `setting.fullscreen "1"`. |
+| `-novid` | yes | Skips the startup videos (stored next to `media/startupvids.txt` in the exe). |
+| `-dev` | yes | Skips the EA intro according to guides. In the exe it sits among the EA backend environment strings (`.R5dev`, `.R5prod`), so its full effect is unclear. |
+
+Cleaned up, with the same effect: `+fps_max 0 +lobby_max_fps 0 -novid -dev`
+
+Options that guides recommend but this build doesn't have: `-preload`, `+cl_forcepreload`, `+mat_queue_mode`. `-high` exists, but guides disagree on whether high CPU priority helps or causes stutter.
+
+## FPS cap
+
+I cap at **280 FPS with RivaTuner Statistics Server (RTSS)**. The in-game cap is off (`+fps_max 0`), so RTSS is the only limiter.
+
+Worth testing:
+
+- **In-game cap instead of RTSS:** `+fps_max 280` in place of `+fps_max 0`, with RTSS off. Blur Busters' tests found in-game limiters usually add less input lag than RTSS, which can add up to 1 frame (3.6 ms at 280 FPS). Nobody has tested this together with Anti-Lag 2.
+- **Slide-jumps at 280:** one 2026 guide claims slide-jumps clip at 275–300 FPS, along with 65–85, 140–160 and 205–230 FPS. 280 falls in that range. The claim is unverified; check it in the Firing Range.
 
 ## Changing configs
 
@@ -53,5 +70,8 @@ Steam → Library → right-click Apex Legends → Properties → General → La
 Notes:
 
 - While `videoconfig.txt` is read-only, the game doesn't save video settings or master volume changed in its menu.
+- When the game saves `videoconfig.txt` itself, it uses LF line endings and adds a NUL byte after the final `}`. Git treats the file as binary while that byte is there. Remove it before committing.
 - Git doesn't store the read-only flag. After a fresh clone, run `attrib +r Apex\local\videoconfig.txt` again.
-- `.gitattributes` keeps every file CRLF on disk, matching what the game writes.
+- `.gitattributes` makes every file CRLF on checkout. The game reads both CRLF and LF.
+
+Sources: [Blur Busters: in-game vs external FPS limiters](https://www.blurbusters.com/gsync/gsync101-input-lag-tests-and-settings/11/), [PC settings guide with the slide-jump FPS ranges (note.com)](https://note.com/x4mberglow/n/n9303b2c96eca?hl=en).
