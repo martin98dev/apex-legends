@@ -2,7 +2,7 @@
 
 Backup and notes for my Apex Legends setup (Steam, PC). The repo root is `%USERPROFILE%\Saved Games\Respawn`.
 
-Last reviewed: Season 31 "Cipher", build `R5pc_r5-310`, 2026-11-23.
+Last reviewed: Season 31 "Cipher", build `R5pc_r5-310`, 2026-11-26.
 
 ## Setup
 
@@ -78,35 +78,34 @@ copy cfg\autoexec.cfg "C:\Program Files (x86)\Steam\steamapps\common\Apex Legend
 Steam → Library → right-click Apex Legends → Properties → General → Launch Options:
 
 ```
-+fps_max 0 +lobby_max_fps 0 +m_rawinput 1 +m_acceleration 0 -fullscreen -novid -dev +exec autoexec
++fps_max 0 +lobby_max_fps 0 +m_acceleration 0 -fullscreen -novid -dev -nojoy -nodiscord +exec autoexec
 ```
-
-This differs from what's in Steam now: it adds `+m_acceleration 0` and `+exec autoexec`, and drops `-forcenovsync`, which the game doesn't have.
 
 | Option | What it does |
 |---|---|
 | `+fps_max 0` | No in-game cap; RTSS caps instead (see below). The engine never goes above 300 FPS. |
 | `+lobby_max_fps 0` | No lobby cap (default 60). |
-| `+m_rawinput 1` | Nothing: the cvar doesn't exist. The game reads the mouse through the Windows Raw Input API on its own. Kept anyway; it's harmless. |
 | `+m_acceleration 0` | Mouse acceleration off. Same value as in `settings.cfg` and the autoexec. |
 | `-fullscreen` | Fullscreen. Redundant while `videoconfig.txt` exists, but covers a first launch without one. |
 | `-novid` | Skips the startup videos. |
 | `-dev` | Skips the EA intro, according to guides. Its full effect is unclear. |
-| `+exec autoexec` | Runs `cfg/autoexec.cfg` from the game folder. |
+| `-nojoy` | Controller input off *(testing)*. |
+| `-nodiscord` | Discord integration / Rich Presence off *(testing)*. |
+| `+exec autoexec` | Runs `cfg/autoexec.cfg` from the game folder *(testing)*. |
 
 The evidence for each line, plus `-high`, `-preload`, `+mat_queue_mode` and other options, is in [docs/launch-options.md](docs/launch-options.md).
 
 ## FPS cap
 
-**Now:** 280 FPS in RivaTuner Statistics Server (RTSS profile `r5apex_dx12.exe.cfg`, `Limit=280`).
+**Now:** 265 FPS in RivaTuner Statistics Server (RTSS profile `r5apex_dx12.exe.cfg`, `Limit=265`).
 
-**Recommended: 265.** 280 is inside a known bug band. At 65–85, 140–160, 205–230 and 275–300 FPS, the jump out of a slide hop can fail and leave you stuck to the floor ([Apex Movement Wiki](https://apexmovement.tech/wiki/tech/General_Tech%3EFundamentals%3ESlide%3EFundamental_Slide_Tech_Article)). The wiki advises capping 5–10 FPS below a band.
+265 sits in the 231–274 gap, 10 FPS below the 275–300 slide-hop bug band. At 65–85, 140–160, 205–230 and 275–300 FPS, the jump out of a slide hop can fail and leave you stuck to the floor ([Apex Movement Wiki](https://apexmovement.tech/wiki/tech/General_Tech%3EFundamentals%3ESlide%3EFundamental_Slide_Tech_Article)). The wiki advises capping 5–10 FPS below a band.
 
 265 only helps if FPS doesn't dip into the 205–230 band during fights. If your 1% low falls under 231, cap at 200 instead.
 
 Two ways to set it:
 
-- **RTSS:** change `Limit=280` to `Limit=265`. Nothing else changes.
+- **RTSS (current):** `Limit=265` with `+fps_max 0`.
 - **In game:** use `+fps_max 265` and set RTSS's limit for Apex to 0. Blur Busters found in-game limiters usually add less input lag than RTSS ([Blur Busters](https://www.blurbusters.com/gsync/gsync101-input-lag-tests-and-settings/11/)).
 
 What slide hops are, how to test for the bug, and the superglide trade-off: [docs/launch-options.md](docs/launch-options.md#fps-cap).

@@ -2,18 +2,18 @@
 
 [`cfg/autoexec.cfg`](../cfg/autoexec.cfg) holds my settings as console commands, so a fresh install gets them on the first launch.
 
-Version 1, generated 2026-11-23 from `Apex/local/settings.cfg` and `Apex/profile/profile.cfg` (Season 31, build `R5pc_r5-310`). **Not yet tested in game.**
+Synced 2026-11-26 from `Apex/local/settings.cfg`, `Apex/profile/profile.cfg`, and `sound_volume` from `Apex/local/videoconfig.txt` (Season 31, build `R5pc_r5-310`). **Currently in testing phase.**
 
 ## Install
 
 1. Copy `cfg\autoexec.cfg` to `C:\Program Files (x86)\Steam\steamapps\common\Apex Legends\cfg\autoexec.cfg`.
-2. Add `+exec autoexec` to the Steam launch options (see [launch-options.md](launch-options.md)).
+2. Add `+exec autoexec` to the Steam launch options on every Steam account you use (Steam stores launch options per account in `Steam\userdata\<id>\config\localconfig.vdf`; see [launch-options.md](launch-options.md)).
 
 The game doesn't run an autoexec by itself: the word `autoexec` isn't in the exe. The `exec` command is, next to the strings `cfg/%s` and `.cfg`, so `exec autoexec` loads `autoexec.cfg` from the game's `cfg` folder. The [DominicKlmNL repo](https://github.com/DominicKlmNL/apex-legends-config) (Sep 2026) uses the same setup.
 
 ## What's in it
 
-- **111 settings** from `settings.cfg` and `profile.cfg`, in sections: mouse, latency, field of view and camera, gameplay, HUD, visual, audio, voice and chat, subtitles, other.
+- **114 settings** from `settings.cfg` and `profile.cfg` (plus `sound_volume` from `videoconfig.txt`), in sections: mouse, latency, field of view and camera, gameplay, HUD, visual, audio, voice and chat, subtitles, other.
 - **All 68 keyboard and mouse binds**, grouped by purpose. They come after `unbindall_ignoreGamepad`, which clears keyboard and mouse binds first, so no leftover default binds survive on a fresh install.
 - Lines are copied unchanged, including the trailing `0` or `1` on bind lines. That number is part of the format the game writes (`%s "%s" "%s" %i` in the exe); what it means is unknown.
 
@@ -21,8 +21,7 @@ The game doesn't run an autoexec by itself: the word `autoexec` isn't in the exe
 
 | Left out | Why |
 |---|---|
-| Video settings | They live in `videoconfig.txt`, which also holds values the menu can't set, like `csm_cascade_res 16`. Copy that file instead (see [videoconfig.md](videoconfig.md)). The [Voltris guide](https://www.voltrisoptimizer.com/en/guides/apex-legends-config-autoexec-superglide) says Respawn blocked most graphics commands in config files in 2021 |
-| Master volume | It's `setting.sound_volume` in `videoconfig.txt` |
+| Video settings | They live in `Apex/local/videoconfig.txt`, which is local to this PC (not synced by Steam Cloud, so it already persists when switching Steam accounts). 12 keys (`defaultres`, `defaultresheight`, `nowindowborder`, `volumetric_lighting`, `volumetric_fog`, `mat_vsync_mode`, `mat_backbuffer_count`, `fadeDistScale`, `new_shadow_settings`, `dynamic_streaming_budget`, `gamma`, `map_detail_level`) don't exist as bare cvars in `r5apex_dx12.exe`, and Respawn restricted graphics commands in `.cfg` files in 2021 ([Voltris guide](https://www.voltrisoptimizer.com/en/guides/apex-legends-config-autoexec-superglide)). Copy `videoconfig.txt` instead (see [videoconfig.md](videoconfig.md)) |
 | Controller settings and binds (56 settings, 31 binds) | No controller in this setup |
 | Game-managed state: EULA, intro and first-time flags, cached player level, telemetry dates, chat-block timers | Not settings. Forcing them could confuse the game |
 | Values tied to this PC or account: `name`, audio and microphone devices, HDR screenshot folder | Differ per PC |

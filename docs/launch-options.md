@@ -1,6 +1,6 @@
 # Launch options and FPS cap
 
-Checked against `r5apex_dx12.exe`, build `R5pc_r5-310` (Season 31), on 2026-11-23.
+Checked against `r5apex_dx12.exe`, build `R5pc_r5-310` (Season 31), on 2026-11-23. Updated 2026-11-26.
 
 ## How an option was checked
 
@@ -15,26 +15,28 @@ It prints `True` or `False`. Replace `-novid` with any switch or cvar name; swit
 ## My launch options
 
 ```
-+fps_max 0 +lobby_max_fps 0 +m_rawinput 1 +m_acceleration 0 -fullscreen -novid -dev +exec autoexec
++fps_max 0 +lobby_max_fps 0 +m_acceleration 0 -fullscreen -novid -dev -nojoy -nodiscord +exec autoexec
 ```
 
 | Option | In exe | What it does | Evidence |
 |---|---|---|---|
 | `+fps_max 0` | yes | No in-game frame cap | The exe stores `fps_absolute_max` with `300.0` beside it, so 300 FPS is the engine maximum whatever `fps_max` says |
 | `+lobby_max_fps 0` | yes | No lobby frame cap | Default is 60, from the patch that added it ([Steam thread](https://steamcommunity.com/app/1172470/discussions/0/5653759001583358562)) |
-| `+m_rawinput 1` | **no** | Nothing | No `m_rawinput` anywhere in the exe, while `m_acceleration` and `mouse_sensitivity` are there. The exe calls the Windows Raw Input API itself (`RegisterRawInputDevices`, `GetRawInputData`, `GetRawInputBuffer`), so raw input is always on |
 | `+m_acceleration 0` | yes | Mouse acceleration off | Same value is saved in `settings.cfg` |
 | `-fullscreen` | yes | Fullscreen | Listed with `-windowed`, `-noborder`, `-width` and `-height` in the exe |
 | `-novid` | yes | Skips the startup videos | Sits next to `media/startupvids.txt` in the exe |
 | `-dev` | yes | Skips the EA intro, according to guides ([DominicKlmNL](https://github.com/DominicKlmNL/apex-legends-config), [rikarsen](https://github.com/rikarsen/apex-config)) | In the exe it sits among the EA backend environment strings (`.R5dev`, `.R5prod`), so it may do more |
-| `+exec autoexec` | yes (`exec`) | Runs `cfg\autoexec.cfg` | `exec` looks in the game's `cfg/` folder and adds `.cfg`. See [autoexec.md](autoexec.md) |
+| `-nojoy` | yes | Controller input off *(testing)* | Sits next to `use_sony_pad_library`, `gamepad_trigger_threshold`, `-gamepad_ignore_local`, and `XInput*` calls in the exe. Currently in testing phase |
+| `-nodiscord` | yes | Discord integration / Rich Presence off *(testing)* | Sits next to `discord_smallImage`, `discord_updatePresence`, and Apex's Discord App ID (`475006012840083466`) in the exe. Currently in testing phase |
+| `+exec autoexec` | yes (`exec`) | Runs `cfg\autoexec.cfg` *(testing)* | `exec` looks in the game's `cfg/` folder and adds `.cfg`. See [autoexec.md](autoexec.md). Currently in testing phase |
 
-Dropped from the old string: `-forcenovsync`. It isn't in the exe, and `setting.mat_vsync_mode "0"` in `videoconfig.txt` already turns V-Sync off.
+Dropped from the old string: `-forcenovsync` and `+m_rawinput 1`. Neither is in the exe: `setting.mat_vsync_mode "0"` in `videoconfig.txt` already turns V-Sync off, and the exe calls the Windows Raw Input API directly (`RegisterRawInputDevices`, `GetRawInputData`, `GetRawInputBuffer`), so raw input is always on.
 
 ## Options guides recommend that aren't in this build
 
 | Option | What it did in other Source-engine games | Here |
 |---|---|---|
+| `+m_rawinput 1` | Enable raw mouse input | Not in the exe. The exe calls Windows Raw Input directly (`RegisterRawInputDevices`, `GetRawInputData`, `GetRawInputBuffer`), so raw input is always on |
 | `-preload`, `+cl_forcepreload 1` | Loaded all map resources while connecting instead of on demand ([csdb.gg](https://csdb.gg/es/command/cl-forcepreload/)) | Not in the exe |
 | `+mat_queue_mode 2` | Material system threading: -1 auto, 0 single thread, 2 multithreaded ([csdb.gg](https://csdb.gg/command/mat-queue-mode/)) | Not in the exe. The DX12 renderer has its own job system (`r_enable_rendering_jobs`, `rhi_dx12_*` switches) |
 | `-threads N` | Worker thread count | Not in the exe |
@@ -57,15 +59,13 @@ None of these were tested. The purpose column is a reading of the name, not docu
 
 | Switch | Purpose (from the name) | Advice |
 |---|---|---|
-| `-nojoy` | Controller input off | Untested |
-| `-nodiscord` | Discord integration off | Untested |
 | `-nomenuvid` | Menu background video off | Untested |
 | `-noborder`, `-forceborder`, `-windowed`, `-startwindowed`, `-width`, `-height` | Window mode and size | Only for windowed play |
 | `-mat_vsync`, `-mat_antialias_mode` | V-Sync and anti-aliasing override | `videoconfig.txt` already sets both |
 | `-safe`, `-autoconfig` | Start with safe or auto-detected video settings | Troubleshooting only. Can replace your video settings |
 | `-disableECores` | Keep the game off Intel efficiency cores | Not relevant: the 9800X3D has none |
 | `-numworkerthreads`, `-numreservedcores`, `-forcedAffinity`, `-swapcores` | Thread layout | Don't touch without measurements |
-| `-render_on_input_thread`, `-no_render_on_input_thread` | Which thread renders | Unknown effect |
+| `-render_on_input_thread`, `-no_render_on_input_thread` | Allow/block render job-type bit (`0x4`) on the `IssueDeferredCalls` thread (`RVA 0x01cd3488`) | Leave both out on the 9800X3D: default already blocks it when `g_numWorkerThreads >= 5` (`RVA 0x0925f908`). `-no_render_on_input_thread` is a no-op; `-render_on_input_thread` forces it back on (troubleshooting only). If both are set, `-no_render_on_input_thread` wins |
 | `-new_pso_cache`, `-no_pso_caching`, `-numPSOThreads` | DX12 shader (PSO) cache | Only for troubleshooting shader stutter |
 | `-stablePowerState` | D3D12 profiling mode that fixes GPU clocks well below normal, system-wide ([Microsoft](https://learn.microsoft.com/en-us/windows/win32/api/d3d12/nf-d3d12-id3d12device-setstablepowerstate)) | Never use |
 | `-dxdebug`, `-renderdoc`, `-dx12_instrumented`, `-gpuhang_dred` | Graphics debugging | Never use; slower |
@@ -75,7 +75,7 @@ None of these were tested. The purpose column is a reading of the name, not docu
 ### Limits
 
 - The engine stops at 300 FPS (`fps_absolute_max`, `300.0` in the exe).
-- **Now:** RTSS caps Apex at 280. The profile is `C:\Program Files (x86)\RivaTuner Statistics Server\Profiles\r5apex_dx12.exe.cfg` with `Limit=280`; the global RTSS limit is 350. In-game `fps_max` is 0.
+- **Now:** RTSS caps Apex at 265. The profile is `C:\Program Files (x86)\RivaTuner Statistics Server\Profiles\r5apex_dx12.exe.cfg` with `Limit=265`; the global RTSS limit is 350. In-game `fps_max` is 0.
 
 ### Slide jumps, slide hops and the FPS bug
 
@@ -100,9 +100,9 @@ Neither the Season 29 nor the Season 30 patch notes mention a fix; Season 31's n
 | Cap | Frame time = superglide window | Slide-hop bands |
 |---|---|---|
 | 200 | 5.0 ms | In a gap (161–204) |
-| **265** | **3.8 ms** | **In a gap (231–274), 10 FPS below the next band** |
+| **265 (now)** | **3.8 ms** | **In a gap (231–274), 10 FPS below the next band** |
 | 270 | 3.7 ms | In a gap; the wiki's example (`+fps_max 270`), 5 FPS below the next band |
-| 280 (now) | 3.6 ms | **In the 275–300 band** |
+| 280 (old) | 3.6 ms | **In the 275–300 band** |
 | 300 | 3.3 ms | In the 275–300 band |
 
 - **Recommendation: 265.** The wiki advises capping 5–10 FPS below a band because slopes widen it, so 265 keeps the full margin.
@@ -120,4 +120,4 @@ Neither the Season 29 nor the Season 30 patch notes mention a fix; Season 31's n
 Blur Busters measured that an in-game limiter usually adds less input lag than an external one like RTSS, which can add up to one frame ([Blur Busters](https://www.blurbusters.com/gsync/gsync101-input-lag-tests-and-settings/11/)). Some forum tests disagree ([Blur Busters forum](https://forums.blurbusters.com/viewtopic.php?p=44278)), and none of these tests used Anti-Lag 2.
 
 - **Lower lag:** `+fps_max 265` in the launch options, and `Limit=0` in the RTSS Apex profile.
-- **Same method as now:** RTSS `Limit=265`, and `+fps_max 0` stays.
+- **Current setup:** RTSS `Limit=265`, and `+fps_max 0` stays.
